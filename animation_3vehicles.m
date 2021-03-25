@@ -1,5 +1,5 @@
 %% Video
-vid=1;
+vid=0;
 
 v = VideoWriter('Video_3Tracker_2D_no_rotate');
 v.FrameRate=5;
