@@ -7,7 +7,7 @@ This repo contains the code to generate the results in the paper entitled:
 
    Contact: hung.seadc@gmail.com
 
-This paper is conditionally accpeted (minor revision) at IEEE Transaction Control System and Technology 
+This paper is conditionally accpeted (with minor revision) for publication at IEEE Transaction on Control System and Technology 
 ### Run and see animation results
 
 - For 1 vehicle - 1 target 2D: SLAP_2D_1Tracker.m 
