@@ -1,5 +1,5 @@
  %% Video
-vid=1;
+vid=0;
 
 v = VideoWriter('video_1vehicle_3D');
 v.FrameRate=5;

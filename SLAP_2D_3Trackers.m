@@ -13,7 +13,7 @@ function Main
     tf = 450;                                                               % simulation time  
     Ts = 0.1;                                                               % sampling interval  
     N = 3;                                                                  % number of tracker used
-    omega_bar = 0.00;
+    omega_bar = 0.05;
 % Initialize the tracker's position and orietation
   % Tracker 1
     Tracker1.p = [0;-50];                                                            % tracker position    
@@ -118,9 +118,7 @@ function Main
     v = [];                                                                 % target velocity
     x = [];                                                                 % target state    
 % gain of coordination controller    
-    kc = 0.02;
-% set communication mode
-    ETC = false;                                                            
+    kc = 0.02;                                                          
 % Store broadcast signals
   % Broadcast signals for transmiting gamma
     Tracker1.Com_Control = [];           
@@ -168,11 +166,7 @@ for t = 0:Ts:tf
   end
 % compute correction speeds using the coordination controller 
 
-    if ETC 
-        [Tracker1, Tracker2, Tracker3] = Coordination_ETC(Tracker1, Tracker2, Tracker3, kc, t);
-    else 
-        [Tracker1, Tracker2, Tracker3] = Coordination_CC(Tracker1, Tracker2, Tracker3, kc);     
-    end
+    [Tracker1, Tracker2, Tracker3] = Coordination_CC(Tracker1, Tracker2, Tracker3, kc);     
     
     Tracker1.omega(end+1) = omega_bar + Tracker1.vc(end);
     Tracker2.omega(end+1) = omega_bar + Tracker2.vc(end);
@@ -181,7 +175,7 @@ for t = 0:Ts:tf
    % Note: if you want to change the desired target trajectory to track, change q and v
     Target.q(:,end+1) = [20*sin(0.01*t +pi);  0.3*t ];                             % target position
     Target.v(:,end+1) = [0.2*cos(0.01*t+pi);  0.3   ];                             % target velocity
-    Target.x(:,end+1) = [Target.q(:,end); Target.v(:,end)];                                      % target state
+    Target.x(:,end+1) = [Target.q(:,end); Target.v(:,end)];                        % target state
 % Update vehicles states
     Tracker1 = ST_Tracking_2D(Tracker1, Target, t, Ts, TTC_type, gains);
     Tracker2 = ST_Tracking_2D(Tracker2, Target, t, Ts, TTC_type, gains);
@@ -193,12 +187,8 @@ for t = 0:Ts:tf
     Tracker3.range(end+1) = norm([Tracker3.p(:,end) - Target.q(:,end);Target.Depth]) + 0.5*randn;
 
 % Estimate the target state using DEKF
-    
-    if ETC 
-        [Tracker1, Tracker2, Tracker3] = DEKF_3V_2D_ETC(Tracker1, Tracker2, Tracker3, Target,Ts,t);
-    else 
-        [Tracker1, Tracker2, Tracker3] = DEKF_3V_2D(Tracker1, Tracker2, Tracker3, Target,Ts,t);     % go with periodic communications
-    end
+
+    [Tracker1, Tracker2, Tracker3] = DEKF_3V_2D(Tracker1, Tracker2, Tracker3, Target,Ts,t);     % go with periodic communications
     
 % Update localization errors 
     Tracker1.E_Loc(end+1) = norm(Target.x(:,end) - Tracker1.x_hat(:,end));       % update localization error at Tracker 1                            
@@ -222,11 +212,6 @@ for t = 0:Ts:tf
     Tracker2.gamma(end+1) = Tracker2.gamma(end) + Ts*Tracker2.gamma_dot(end);   
     Tracker3.gamma(end+1) = Tracker3.gamma(end) + Ts*Tracker3.gamma_dot(end);  
     
-    if ETC
-        Tracker1.gamma_hat(end+1) = Tracker1.gamma_hat(end) + Ts*omega_bar;   
-        Tracker2.gamma_hat(end+1) = Tracker2.gamma_hat(end) + Ts*omega_bar;
-        Tracker3.gamma_hat(end+1) = Tracker3.gamma_hat(end) + Ts*omega_bar;
-    end
 end 
  
  

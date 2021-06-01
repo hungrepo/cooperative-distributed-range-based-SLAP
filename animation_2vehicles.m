@@ -1,7 +1,7 @@
 %% Video
-vid=0;
+vid=1;
 
-v = VideoWriter('video_2vehicle');
+v = VideoWriter('video_2vehicle_no_rotate');
 v.FrameRate=5;
  open(v);
 

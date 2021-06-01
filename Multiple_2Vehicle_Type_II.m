@@ -10,8 +10,10 @@ Epursuit3=[];
 Eest1=[];
 Eest2=[];
 Eest3=[];
+tf = 1000;
 for t = 0:Ts:tf
     time=[time; t];
+
     if t==0
       gamma1= 2*pi-pi/4;
         gamma2= -pi/2+2*pi;
@@ -26,8 +28,8 @@ for t = 0:Ts:tf
         R2=30;
         R3=30;
         
-        Target.Id1.Pos=0*[20*sin(0.01*t +pi);  0.3*t ];
-        Target.Id1.Vel=0*[0.2*cos(0.01*t+pi); 0.3    ];
+        Target.Id1.Pos=1*[20*sin(0.01*t +pi);  0.3*t ];
+        Target.Id1.Vel=1*[0.2*cos(0.01*t+pi); 0.3    ];
         
         Target.Id1.State=[Target.Id1.Pos; Target.Id1.Vel];
 
@@ -235,8 +237,19 @@ upf3=Delta_inv*(Rot3'*(q_hat_dot3(:,end)+r_gamma3*(omega_bar+uc3))-K*e3);
 
 
  gamma1_ddot=-kz*e_gamma1+e1'*Rot1'*r_gamma1 +duc1;
+ 
 % gamma1_ddot=sat(gamma1_ddot,0,0.005);
  gamma1_dot(end+1)=sat(gamma1_dot(end)+Ts*gamma1_ddot,0.01,0.1);
+
+%  if t > tf/8
+%      omega_bar = omega_bar - 0.0001;
+%  end
+%  
+ if t > tf/4
+        gamma1_dot = 0;
+        omega_bar = 0;
+ end
+ 
  gamma1(end+1)=gamma1(end)+Ts*gamma1_dot(end);
 % gamma1(end+1)=gamma1(end)+Ts*(omega_bar+uc1);
 
@@ -244,12 +257,20 @@ upf3=Delta_inv*(Rot3'*(q_hat_dot3(:,end)+r_gamma3*(omega_bar+uc3))-K*e3);
  gamma2_ddot=-kz*e_gamma2+e2'*Rot2'*r_gamma2+duc2;
 % gamma2_ddot=sat(gamma2_ddot,0,0.005);
  gamma2_dot(end+1)=sat(gamma2_dot(end)+Ts*gamma2_ddot,0.01,0.1);
+ 
+ if t>tf/4
+        gamma2_dot = 0;
+ end
+ 
  gamma2(end+1)=gamma2(end)+Ts*gamma2_dot(end);
 % gamma2(end+1)=gamma2(end)+Ts*(omega_bar+uc2);
 
  gamma3_ddot=-kz*e_gamma3+e3'*Rot3'*r_gamma3+duc3;
 % gamma3_ddot=sat(gamma3_ddot,0,0.005);
  gamma3_dot(end+1)=sat(gamma3_dot(end)+Ts*gamma3_ddot,0.01,0.1);
+ if t>tf/4
+        gamma3_dot = 0;
+ end
  gamma3(end+1)=gamma3(end)+Ts*gamma3_dot(end);
 % gamma3(end+1)=gamma3(end)+Ts*(omega_bar+uc3);
 
@@ -266,8 +287,8 @@ Tracker.Id2.State(:,end+1)=update_vehicle(Tracker.Id2.State(:,end),Tracker.Id2.I
 Tracker.Id3.State(:,end+1)=update_vehicle(Tracker.Id3.State(:,end),Tracker.Id3.Input(:,end),Ts,t);
 
 
-Target.Id1.Pos(:,end+1)=0*[20*sin(0.01*t +pi);  0.2*t ];
-Target.Id1.Vel(:,end+1)=0*[0.2*cos(0.01*t+pi); 0.2    ];
+Target.Id1.Pos(:,end+1)=1*[20*sin(0.01*t +pi);  0.2*t ];
+Target.Id1.Vel(:,end+1)=1*[0.2*cos(0.01*t+pi); 0.2    ];
 Target.Id1.State=[Target.Id1.Pos;Target.Id1.Vel];
 
 

@@ -17,7 +17,9 @@
 function [xhatOut,POut] = STST_EKF_PosVel(r,p,xhat,P,Ts,depth,t) 
 % Tunning parameter of the EKF
     Q = 1e-4*diag([10 10 1 1]);
+    W = inv(Q);
     R = 10;
+    V = 1/R; 
 % Discrete model
     F = [1 0 Ts 0;
          0 1 0  Ts;
@@ -26,21 +28,58 @@ function [xhatOut,POut] = STST_EKF_PosVel(r,p,xhat,P,Ts,depth,t)
     qhat=xhat(1:2);
     rhat = norm([qhat-p;depth]);
     H = [(qhat-p)'/rhat 0 0] ;              % Jacobian
-% Predict
-    xhat = F*xhat;
-    P = F*P*F' + Q;
-% Calculate the Kalman gain
-    K = P*H'/(H*P*H' + R);
-% Calculate the measurement residual
-    resid = r - rhat;
+    
+    persistent z Omega ;
+    if isempty(z)
+        Omega = inv(P);
+        z = Omega*xhat;
+    end
+    
+    
+    
+%% Kalman form
+ 
+
+% % Update the state and covariance estimates
+%     Ts_meas = 2;
+%     if rem(t,Ts_meas)==0
+%         % Calculate the Kalman gain
+%         K = P*H'/(H*P*H' + R);
+% %        Calculate the measurement residual
+%         resid = r - rhat;
+%         xhat = xhat + K*resid;
+%         P = (eye(size(K,1))-K*H)*P;
+%         % only correct predicted mean and covariance when having 
+%         % a new range, assumed available at every Ts_meas second
+%     end
+%     
+% % Predict
+%     xhat = F*xhat;
+%     P = F*P*F' + Q;
+% % return    
+%     xhatOut = xhat;
+%     POut = P;
+
+%% Information form
+   
+
 % Update the state and covariance estimates
     Ts_meas = 2;
     if rem(t,Ts_meas)==0
-        xhat = xhat + K*resid;
-        P = (eye(size(K,1))-K*H)*P;
+        % Calculate the measurement residual
+        resid = r - rhat + H*xhat;
+        z = z + H'*V*resid;
+        Omega = Omega + H'*V*H;
         % only correct predicted mean and covariance when having 
         % a new range, assumed available at every Ts_meas second
     end
-% Return
+    xhat = inv(Omega)*z;
+    
+% % Predict
+    xhat = F*xhat;
+    Omega = W - W*F*inv(Omega + F'*W*F)*F'*W;
+    z = Omega*xhat;
+%% Return
     xhatOut = xhat;
-    POut = P;
+    POut = inv(Omega);
+

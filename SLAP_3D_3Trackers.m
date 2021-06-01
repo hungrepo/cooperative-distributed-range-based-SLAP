@@ -120,9 +120,7 @@ function Main
     v = [];                                                                 % target velocity
     x = [];                                                                 % target state    
 % gain of coordination controller    
-    kc = 0.02;
-% set communication mode
-    ETC = false;                                                            
+    kc = 0.02;                                                          
 % Store broadcast signals
   % Broadcast signals for transmiting gamma
     Tracker1.Com_Control = [];           
@@ -140,26 +138,6 @@ function Main
     Tracker1.gamma_tilde = [];
     Tracker2.gamma_tilde = [];
     Tracker3.gamma_tilde = [];
-% Store triggering function for ETC coordination
-    Tracker1.h = [];
-    Tracker2.h = [];
-    Tracker3.h = [];
-% Store triggering functions for ETC DEKF
-    Tracker1.g = [];
-    Tracker2.g = [];
-    Tracker3.g = [];
-% Store Kullback-Leibler Divergence    
-    Tracker1.KLD = [];
-    Tracker2.KLD = [];
-    Tracker3.KLD = [];
-% Store reference propagation
-    Tracker1.x_bar = Tracker1.x_hat; 
-    Tracker2.x_bar = Tracker2.x_hat;
-    Tracker3.x_bar = Tracker3.x_hat;
-    
-    Tracker1.P_bar = Tracker1.P_hat; 
-    Tracker2.P_bar = Tracker2.P_hat;
-    Tracker3.P_bar = Tracker3.P_hat;
     
 %------------------------------Start simulation ---------------------------
 
@@ -169,13 +147,7 @@ for t = 0:Ts:tf
     time_d(end+1) = t/2; 
   end
 % compute correction speeds using the coordination controller 
-
-    if ETC 
-        [Tracker1, Tracker2, Tracker3] = Coordination_ETC(Tracker1, Tracker2, Tracker3, kc, t);
-    else 
-        [Tracker1, Tracker2, Tracker3] = Coordination_CC(Tracker1, Tracker2, Tracker3, kc);     
-    end
-    
+    [Tracker1, Tracker2, Tracker3] = Coordination_CC(Tracker1, Tracker2, Tracker3, kc);     
     Tracker1.omega(end+1) = omega_bar + Tracker1.vc(end);
     Tracker2.omega(end+1) = omega_bar + Tracker2.vc(end);
     Tracker3.omega(end+1) = omega_bar + Tracker3.vc(end);
@@ -195,12 +167,7 @@ for t = 0:Ts:tf
     Tracker3.range(end+1) = norm(Tracker3.p(:,end) - Target.q(:,end)) + 0.5*randn;
 
 % Estimate the target state using DEKF
-    
-    if ETC 
-        [Tracker1, Tracker2, Tracker3] = DEKF_3V_3D_ETC(Tracker1, Tracker2, Tracker3, Target,Ts,t);
-    else 
-        [Tracker1, Tracker2, Tracker3] = DEKF_3V_3D(Tracker1, Tracker2, Tracker3, Target,Ts,t);     % go with periodic communications
-    end
+    [Tracker1, Tracker2, Tracker3] = DEKF_3V_3D(Tracker1, Tracker2, Tracker3, Target,Ts,t);     % go with periodic communications
     
 % Update localization errors 
     Tracker1.E_Loc(end+1) = norm(Target.x(:,end) - Tracker1.x_hat(:,end));       % update localization error at Tracker 1                            
@@ -223,12 +190,6 @@ for t = 0:Ts:tf
     Tracker1.gamma(end+1) = Tracker1.gamma(end) + Ts*Tracker1.gamma_dot(end);   
     Tracker2.gamma(end+1) = Tracker2.gamma(end) + Ts*Tracker2.gamma_dot(end);   
     Tracker3.gamma(end+1) = Tracker3.gamma(end) + Ts*Tracker3.gamma_dot(end);  
-    
-    if ETC
-        Tracker1.gamma_hat(end+1) = Tracker1.gamma_hat(end) + Ts*omega_bar;   
-        Tracker2.gamma_hat(end+1) = Tracker2.gamma_hat(end) + Ts*omega_bar;
-        Tracker3.gamma_hat(end+1) = Tracker3.gamma_hat(end) + Ts*omega_bar;
-    end
 end 
  
  

@@ -418,111 +418,111 @@ set(lgd7,'FontSize',12,'Interpreter','latex');
 
 %set(fig7,'Interpreter','latex');
 
- %% Plot broadcast signals with cooperative pursuit 
-fontsize=12;
-
-  fig10 = figure(10);
-  
-      set(fig10,'position',[0 0 550 200]);
-      idx = find(Tracker1.Com_Control(1,1:n)==1);
-      plot(time(idx),1*Tracker1.Com_Control(1,idx),'.','MarkerSize',8,'Color',AUV_COL11); hold on;
-      
-      idx = find(Tracker2.Com_Control(1,1:n)==1);
-      plot(time(idx),2*Tracker2.Com_Control(1,idx),'.','MarkerSize',8,'Color',AUV_COL22); hold on;
-      
-      idx = find(Tracker3.Com_Control(1,1:n)==1);
-      plot(time(idx),3*Tracker3.Com_Control(1,idx),'.','MarkerSize',8,'Color',AUV_COL33); hold on;
-    
-%   tmin=t(1); tmax=t(end)+1;
-   limit=[-0 200 -0 4];
-   axis(limit);
-%   set(gca,'YTick',[0 0.4 0.7 1]);
-  set(gca,'Yticklabel',[]); 
-%   grid on
- % title('Broadcast time instants of the agents','Interpreter','latex');
-  xlabel('$t[s]$','Interpreter','latex','FontSize', fontsize);
-  ylabel('$t^{[i]}_n$','Interpreter','latex','FontSize', fontsize);
-
-%  legend('Agent 1','Agent 2','Agent 3', 'Agent 4', 'Agent 5');
-
-%% Plot time instant broadcast in DEKF
- fig11 = figure(11);
-      m = 100;
-      set(fig11,'position',[0 0 550 200]);
-      idx = find(Tracker1.Com_DEKF(1,1:m)==1);
-      plot(time_d(idx),1*Tracker1.Com_DEKF(1,idx),'.','MarkerSize',8,'Color',AUV_COL11); hold on;
-      
-      idx = find(Tracker2.Com_DEKF(1,1:m)==1);
-      plot(time_d(idx),2*Tracker2.Com_DEKF(1,idx),'.','MarkerSize',8,'Color',AUV_COL22); hold on;
-      
-      idx = find(Tracker3.Com_DEKF(1,1:m)==1);
-      plot(time_d(idx),3*Tracker3.Com_DEKF(1,idx),'.','MarkerSize',8,'Color',AUV_COL33); hold on;
-    
-%   tmin=t(1); tmax=t(end)+1;
-   limit=[-0 100 -0 4];
-   axis(limit);
-%   set(gca,'YTick',[0 0.4 0.7 1]);
-  set(gca,'Yticklabel',[]); 
-%   grid on
- % title('Broadcast time instants of the agents','Interpreter','latex');
-  xlabel('$k(t=kT_s)$','Interpreter','latex','FontSize', fontsize);
-  ylabel('$k^{[i]}_l$','Interpreter','latex','FontSize', fontsize);
-
-%  legend('Agent 1','Agent 2','Agent 3', 'Agent 4', 'Agent 5');
-
-
- 
-%% Plot estimation error of gamma  
-  fig12 = figure(12);
-  set(fig12,'position',[0 0 550 400]);
-
-      subplot(3,1,1);
-      plot(time(1:n),Tracker1.h(1,1:n),'LineWidth',1); hold on;
-      plot(time(1:n),abs(Tracker1.gamma_tilde(1,1:n)),'LineWidth',1,'Color',AUV_COL11); 
-      limit=[-0 200 -0 2.5];    axis(limit);
-      lg=legend('$h^{[1]}(t)$','$||{\tilde{\gamma}}^{[1]}(t)||$' );
-      set(lg,'Interpreter','latex');
-      
-      
-      subplot(3,1,2);
-      plot(time(1:n),Tracker1.h(1,1:n),'LineWidth',1); hold on;
-      plot(time(1:n),abs(Tracker2.gamma_tilde(1,1:n)),'LineWidth',1,'Color',AUV_COL22); 
-      limit=[-0 200 -0 2.5];    axis(limit);
-      lg=legend('$h^{[2]}$','$||{\tilde{\gamma}}^{[2]}(t)||$' );
-      set(lg,'Interpreter','latex');
-      
-      
-      subplot(3,1,3);
-      plot(time(1:n),Tracker3.h(1,1:n),'LineWidth',1); hold on;
-      plot(time(1:n),abs(Tracker3.gamma_tilde(1,1:n)),'LineWidth',1,'Color',AUV_COL33); 
-      limit=[-0 200 -0 2.5];    axis(limit);
-      lg=legend('$h^{[3]}(t)$','$||{\tilde{\gamma}}^{[3]}(t)||$' );
-      set(lg,'Interpreter','latex');
-      
-      
- %% Plot estimation error KLD
-  fig13 = figure(13);
-  set(fig13,'position',[0 0 550 400]);
-
-      subplot(3,1,1);
-      plot(time_d(1:m),Tracker1.g(1,1:m),'LineWidth',1); hold on;
-      plot(time_d(1:m),abs(Tracker1.KLD(1,1:m)),'LineWidth',1,'Color',AUV_COL11); 
-      limit=[-0 100 -0 20];    axis(limit);
-      lg=legend('$g^{[1]}(k)$','${\mathcal{KLD}}^{[1]}_{k}$' );
-      set(lg,'Interpreter','latex');
-      
-      
-      subplot(3,1,2);
-      plot(time_d(1:m),Tracker2.g(1,1:m),'LineWidth',1); hold on;
-      plot(time_d(1:m),abs(Tracker2.KLD(1,1:m)),'LineWidth',1,'Color',AUV_COL22); 
-      limit=[-0 100 -0 20];    axis(limit);
-      lg=legend('$g^{[2]}(k)$','${\mathcal{KLD}}^{[2]}_{k}$' );
-      set(lg,'Interpreter','latex');
-      
-      subplot(3,1,3);
-      plot(time_d(1:m),Tracker3.g(1,1:m),'LineWidth',1); hold on;
-      plot(time_d(1:m),Tracker3.KLD(1,1:m),'LineWidth',1,'Color',AUV_COL33); 
-      limit=[-0 100 -0 20];    axis(limit);
-      lg=legend('$g^{[3]}(k)$','${\mathcal{KLD}}^{[3]}_{k}$' );
-      set(lg,'Interpreter','latex');
-  
+%  %% Plot broadcast signals with cooperative pursuit 
+% fontsize=12;
+% 
+%   fig10 = figure(10);
+%   
+%       set(fig10,'position',[0 0 550 200]);
+%       idx = find(Tracker1.Com_Control(1,1:n)==1);
+%       plot(time(idx),1*Tracker1.Com_Control(1,idx),'.','MarkerSize',8,'Color',AUV_COL11); hold on;
+%       
+%       idx = find(Tracker2.Com_Control(1,1:n)==1);
+%       plot(time(idx),2*Tracker2.Com_Control(1,idx),'.','MarkerSize',8,'Color',AUV_COL22); hold on;
+%       
+%       idx = find(Tracker3.Com_Control(1,1:n)==1);
+%       plot(time(idx),3*Tracker3.Com_Control(1,idx),'.','MarkerSize',8,'Color',AUV_COL33); hold on;
+%     
+% %   tmin=t(1); tmax=t(end)+1;
+%    limit=[-0 200 -0 4];
+%    axis(limit);
+% %   set(gca,'YTick',[0 0.4 0.7 1]);
+%   set(gca,'Yticklabel',[]); 
+% %   grid on
+%  % title('Broadcast time instants of the agents','Interpreter','latex');
+%   xlabel('$t[s]$','Interpreter','latex','FontSize', fontsize);
+%   ylabel('$t^{[i]}_n$','Interpreter','latex','FontSize', fontsize);
+% 
+% %  legend('Agent 1','Agent 2','Agent 3', 'Agent 4', 'Agent 5');
+% 
+% %% Plot time instant broadcast in DEKF
+%  fig11 = figure(11);
+%       m = 100;
+%       set(fig11,'position',[0 0 550 200]);
+%       idx = find(Tracker1.Com_DEKF(1,1:m)==1);
+%       plot(time_d(idx),1*Tracker1.Com_DEKF(1,idx),'.','MarkerSize',8,'Color',AUV_COL11); hold on;
+%       
+%       idx = find(Tracker2.Com_DEKF(1,1:m)==1);
+%       plot(time_d(idx),2*Tracker2.Com_DEKF(1,idx),'.','MarkerSize',8,'Color',AUV_COL22); hold on;
+%       
+%       idx = find(Tracker3.Com_DEKF(1,1:m)==1);
+%       plot(time_d(idx),3*Tracker3.Com_DEKF(1,idx),'.','MarkerSize',8,'Color',AUV_COL33); hold on;
+%     
+% %   tmin=t(1); tmax=t(end)+1;
+%    limit=[-0 100 -0 4];
+%    axis(limit);
+% %   set(gca,'YTick',[0 0.4 0.7 1]);
+%   set(gca,'Yticklabel',[]); 
+% %   grid on
+%  % title('Broadcast time instants of the agents','Interpreter','latex');
+%   xlabel('$k(t=kT_s)$','Interpreter','latex','FontSize', fontsize);
+%   ylabel('$k^{[i]}_l$','Interpreter','latex','FontSize', fontsize);
+% 
+% %  legend('Agent 1','Agent 2','Agent 3', 'Agent 4', 'Agent 5');
+% 
+% 
+%  
+% %% Plot estimation error of gamma  
+%   fig12 = figure(12);
+%   set(fig12,'position',[0 0 550 400]);
+% 
+%       subplot(3,1,1);
+%       plot(time(1:n),Tracker1.h(1,1:n),'LineWidth',1); hold on;
+%       plot(time(1:n),abs(Tracker1.gamma_tilde(1,1:n)),'LineWidth',1,'Color',AUV_COL11); 
+%       limit=[-0 200 -0 2.5];    axis(limit);
+%       lg=legend('$h^{[1]}(t)$','$||{\tilde{\gamma}}^{[1]}(t)||$' );
+%       set(lg,'Interpreter','latex');
+%       
+%       
+%       subplot(3,1,2);
+%       plot(time(1:n),Tracker1.h(1,1:n),'LineWidth',1); hold on;
+%       plot(time(1:n),abs(Tracker2.gamma_tilde(1,1:n)),'LineWidth',1,'Color',AUV_COL22); 
+%       limit=[-0 200 -0 2.5];    axis(limit);
+%       lg=legend('$h^{[2]}$','$||{\tilde{\gamma}}^{[2]}(t)||$' );
+%       set(lg,'Interpreter','latex');
+%       
+%       
+%       subplot(3,1,3);
+%       plot(time(1:n),Tracker3.h(1,1:n),'LineWidth',1); hold on;
+%       plot(time(1:n),abs(Tracker3.gamma_tilde(1,1:n)),'LineWidth',1,'Color',AUV_COL33); 
+%       limit=[-0 200 -0 2.5];    axis(limit);
+%       lg=legend('$h^{[3]}(t)$','$||{\tilde{\gamma}}^{[3]}(t)||$' );
+%       set(lg,'Interpreter','latex');
+%       
+%       
+%  %% Plot estimation error KLD
+%   fig13 = figure(13);
+%   set(fig13,'position',[0 0 550 400]);
+% 
+%       subplot(3,1,1);
+%       plot(time_d(1:m),Tracker1.g(1,1:m),'LineWidth',1); hold on;
+%       plot(time_d(1:m),abs(Tracker1.KLD(1,1:m)),'LineWidth',1,'Color',AUV_COL11); 
+%       limit=[-0 100 -0 20];    axis(limit);
+%       lg=legend('$g^{[1]}(k)$','${\mathcal{KLD}}^{[1]}_{k}$' );
+%       set(lg,'Interpreter','latex');
+%       
+%       
+%       subplot(3,1,2);
+%       plot(time_d(1:m),Tracker2.g(1,1:m),'LineWidth',1); hold on;
+%       plot(time_d(1:m),abs(Tracker2.KLD(1,1:m)),'LineWidth',1,'Color',AUV_COL22); 
+%       limit=[-0 100 -0 20];    axis(limit);
+%       lg=legend('$g^{[2]}(k)$','${\mathcal{KLD}}^{[2]}_{k}$' );
+%       set(lg,'Interpreter','latex');
+%       
+%       subplot(3,1,3);
+%       plot(time_d(1:m),Tracker3.g(1,1:m),'LineWidth',1); hold on;
+%       plot(time_d(1:m),Tracker3.KLD(1,1:m),'LineWidth',1,'Color',AUV_COL33); 
+%       limit=[-0 100 -0 20];    axis(limit);
+%       lg=legend('$g^{[3]}(k)$','${\mathcal{KLD}}^{[3]}_{k}$' );
+%       set(lg,'Interpreter','latex');
+%   
