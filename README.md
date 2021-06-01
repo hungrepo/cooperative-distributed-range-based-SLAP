@@ -5,10 +5,9 @@ This repo contains the code to generate the results in the paper entitled:
 
    Authors: Nguyen T. Hung, Francisco Rego, Antonio Pascoal, Institute for System and Robotic, IST, Lisbon
 
-   Contact: nguyen.hung@tecnico.ulisboa.pt
+   Contact: hung.seadc@gmail.com
 
-published in ... 
-
+This paper is conditionally accpeted (minor revision) at IEEE Transaction Control System and Technology 
 ### Run and see animation results
 
 - For 1 vehicle - 1 target 2D: SLAP_2D_1Tracker.m 
@@ -17,6 +16,7 @@ published in ...
 - For 3 vehicle - 1 target 3D: SLAP_3D_3Trackers.m
 
 ### Citation
+
 
 
 ### More information: 
