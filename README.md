@@ -14,7 +14,9 @@ This repo contains the code to generate the results in the paper entitled:
 - For 3 vehicle - 1 target 2D: SLAP_2D_3Trackers.m
 - For 3 vehicle - 1 target 3D: SLAP_3D_3Trackers.m
 
-### Citation
+### Reference
+
+If you find the code useful and would like to cite, please reference to the following paper:
 
 N. T. Hung, F. F. C. Rego and A. M. Pascoal, "Cooperative Distributed Estimation and Control of Multiple Autonomous Vehicles for Range-Based Underwater Target Localization and Pursuit," in IEEE Transactions on Control Systems Technology, doi: 10.1109/TCST.2021.3107346.
 
