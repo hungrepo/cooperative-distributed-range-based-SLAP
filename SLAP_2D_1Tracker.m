@@ -10,6 +10,8 @@
          
 %% =========================================================================================================================
 function Main
+    rng(0, 'twister');        % Repeat the same random sequence every run
+    clear STST_EKF_PosVel     % Reset persistent EKF state
 % ------------------------------------Initialization-------------------------------------------------------
     tf = 450;                                                               % simulation time  
     Ts = 0.1;                                                               % sampling interval  
